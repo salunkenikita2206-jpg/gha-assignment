@@ -1,5 +1,4 @@
 name: Release Notes
-
 on:
   workflow_dispatch:
     inputs:
