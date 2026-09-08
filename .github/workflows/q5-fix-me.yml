@@ -1,0 +1,36 @@
+name: Version Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    outputs:
+      version: ${{ steps.make.outputs.version }}
+
+    steps:
+      - name: Make version
+        id: make
+        run: |
+          VERSION="1.0.${GITHUB_RUN_NUMBER}"
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Version generated: $VERSION"
+
+  consume:
+    runs-on: ubuntu-latest
+    needs: generate
+
+    steps:
+      - name: Use version
+        run: echo "Version is ${{ needs.generate.outputs.version }}"
+
+      - name: Fail if empty
+        run: |
+          if [ -z "${{ needs.generate.outputs.version }}" ]; then
+            echo "version was empty"
+            exit 1
+          fi
+
+          echo "version is available"
