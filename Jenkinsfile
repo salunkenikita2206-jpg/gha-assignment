@@ -1,27 +1,18 @@
 pipeline {
     agent any
 
-    environment {
-        APP_ENV = 'staging'
-    }
-
     stages {
-        stage('Build') {
+        stage('Checkout') {
             steps {
-                retry(3) {
-                    sh 'echo "Building application in environment: ${APP_ENV}..."'
-                }
-            }
-        }
-        stage('Test') {
-            steps {
-                script {
-                    try {
-                        sh 'echo "Running tests..."'
-                    } catch (err) {
-                        currentBuild.result = 'UNSTABLE'
-                    }
-                }
+                checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],
+                    userRemoteConfigs: [[url: 'https://github.com/salunkenikita2206-jpg/gha-assignment.git']],
+                    extensions: [
+                        [$class: 'CleanBeforeCheckout'],
+                        [$class: 'WipeWorkspace']
+                    ]
+                ])
             }
         }
     }
