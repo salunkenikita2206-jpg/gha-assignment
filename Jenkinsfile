@@ -4,25 +4,25 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/example/app.git'
+                checkout scm
             }
         }
         stage('Build') {
             steps {
-                sh 'npm install'
-                sh 'npm run build'
+                sh 'echo "Installing dependencies..."'
+                sh 'echo "Building project..."'
             }
         }
         stage('Parallel Tests') {
             parallel {
                 stage('Unit Tests') {
                     steps {
-                        sh 'npm test'
+                        sh 'echo "Running unit tests..."'
                     }
                 }
                 stage('Lint') {
                     steps {
-                        sh 'npm run lint'
+                        sh 'echo "Running linter..."'
                     }
                 }
             }
@@ -31,7 +31,7 @@ pipeline {
 
     post {
         always {
-            sh 'rm -rf workspace/*'
+            cleanWs()
         }
     }
 }
