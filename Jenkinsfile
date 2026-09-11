@@ -4,38 +4,34 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git url: 'https://github.com/example/app.git'
             }
         }
         stage('Build') {
             steps {
-                sh 'echo "Building application..."'
+                sh 'npm install'
+                sh 'npm run build'
             }
         }
-        stage('Test') {
-            steps {
-                sh 'echo "Running test suite..."'
-            }
-        }
-        stage('Deploy') {
-            when {
-                branch 'main'
-            }
-            steps {
-                sh 'echo "Deploying application..."'
+        stage('Parallel Tests') {
+            parallel {
+                stage('Unit Tests') {
+                    steps {
+                        sh 'npm test'
+                    }
+                }
+                stage('Lint') {
+                    steps {
+                        sh 'npm run lint'
+                    }
+                }
             }
         }
     }
 
     post {
         always {
-            archiveArtifacts artifacts: 'test-reports/**', allowEmptyArchive: true
-        }
-        success {
-            echo 'Pipeline succeeded'
-        }
-        failure {
-            echo 'Pipeline failed'
+            sh 'rm -rf workspace/*'
         }
     }
 }
