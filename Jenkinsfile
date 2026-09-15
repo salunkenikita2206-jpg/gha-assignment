@@ -1,19 +1,16 @@
 pipeline {
-    agent any
-
+    agent any 
+    parameters {
+        string (name:'VERSION' defaultvalue: '1.0' description:'version to deploy')
+        choice (name: 'ENVIRONMENT',choices: ['etaging,'production'],description: 'TARGET')
+        booleanParam (name:'SKIP_TESTS',defaultValue: false, description: 'skip tests?")
+                      }
     stages {
-        stage('Checkout') {
+        stage('Build') {
             steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/main']],
-                    userRemoteConfigs: [[url: 'https://github.com/salunkenikita2206-jpg/gha-assignment.git']],
-                    extensions: [
-                        [$class: 'CleanBeforeCheckout'],
-                        [$class: 'WipeWorkspace']
-                    ]
-                ])
+                echo 'Building'
             }
         }
     }
-}
+                      }
+                                              
