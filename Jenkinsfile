@@ -12,6 +12,14 @@ pipeline {
                parallel {
                    stage('Unit') { steps { sh 'echo Unit tests' } }
                    stage('Integration') { steps { sh 'echo Integration tests' } }
+               post {
+                   success {
+                       echo 'Pipeline suceeded'
+                   }
+                   failure {
+                       echo 'Pipeline failed'
+                   }
+               }
            }
        }
    }
