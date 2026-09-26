@@ -12,6 +12,10 @@ pipeline {
         }
     }
 }
-                 
+stage('Approve') {
+    steps {
+        input message: 'Deploy to production?'
+    }
+}
                     
    
