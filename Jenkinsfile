@@ -5,7 +5,6 @@ pipeline {
    }
    stages {
            stage('Tests') {
-        
              stage('Approve') {
                    steps {
                        input message: 'Deploy to production ?'
