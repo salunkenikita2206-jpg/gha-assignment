@@ -1,25 +1,17 @@
 pipeline {
     agent any
-    parameters {
-        choice(name: 'ENVIRONMENT', choices: ['staging', 'production' ], description: 'Target')
+    environment {
+       APP_NAME = 'demo'
     }
     stages {
-        stage('Build') { 
-            steps { echo 'Building' }
-        }
-        stage('Tests') {
-            parallel {
-                stage('Unit') { steps { sh 'echo Unit tests' } }
-                stage('Integration') { steps { sh 'echo Integration tests' } }
+        stage('Build') {
+            environment {
+                BUILD_MODE='production'
+            }
+            steps {
+                sh 'echo $APP_NAME $BUILD_MODE'
             }
         }
-        stage('Approve') {
-    steps {
-        input message: 'Deploy to production?'
     }
 }
-          
-    }
-}
-            
    
