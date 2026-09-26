@@ -4,7 +4,6 @@ pipeline {
        choice(name: 'ENVIRONMENT',choices: ['staging','production'],description: 'Target')
    }
    stages {
-       stage('Deploy') {
            stage('Tests') {
                parallel {
                    stage('Unit') { steps { sh 'echo Unit tests' } }
